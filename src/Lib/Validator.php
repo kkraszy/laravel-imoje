@@ -128,12 +128,21 @@ class Validator
         // If content is empty (e.g., in tests), fall back to json encoding the data
         $body = $request->getContent();
         if (empty($body)) {
-            $body = json_encode($request->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            // Use same JSON flags as imoje uses: only JSON_UNESCAPED_SLASHES
+            $body = json_encode($request->toArray(), JSON_UNESCAPED_SLASHES);
         }
         
         $expectedSignature = hash($hashMethod->getValue(), $body . $this->config->serviceKey);
+        $receivedSignature = $header['signature'] ?? '';
 
-        if ($expectedSignature !== ($header['signature'] ?? '')) {
+        // Log signature mismatch for debugging
+        if ($expectedSignature !== $receivedSignature) {
+            \Log::debug('Imoje signature verification failed', [
+                'expected' => $expectedSignature,
+                'received' => $receivedSignature,
+                'body_length' => strlen($body),
+                'algorithm' => $hashMethod->getValue(),
+            ]);
             throw new InvalidSignatureException;
         }
     }

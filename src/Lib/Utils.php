@@ -37,7 +37,8 @@ class Utils
         array $body,
         HashMethod $hashMethod
     ): bool {
-        $body = json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        // Use same JSON flags as imoje uses: only JSON_UNESCAPED_SLASHES
+        $body = json_encode($body, JSON_UNESCAPED_SLASHES);
 
         return $signature === hash($hashMethod->getValue(), $body.$this->config->serviceKey);
     }
