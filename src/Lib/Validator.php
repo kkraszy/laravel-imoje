@@ -20,11 +20,15 @@ class Validator
     
     /** @var Utils */
     protected $utils;
+    
+    /** @var Config */
+    protected $config;
 
-    public function __construct(JsonSchemaValidator $jsonValidator, Utils $utils)
+    public function __construct(JsonSchemaValidator $jsonValidator, Utils $utils, Config $config)
     {
         $this->jsonValidator = $jsonValidator;
         $this->utils = $utils;
+        $this->config = $config;
     }
 
     /**
@@ -120,13 +124,16 @@ class Validator
 
         $hashMethod = new HashMethod($header['alg'] ?? 'sha256');
 
-        $result = $this->utils->verifySignature(
-            $header['signature'] ?? '',
-            $request->toArray(),
-            $hashMethod
-        );
+        // Use raw request content to preserve exact JSON format from imoje
+        // If content is empty (e.g., in tests), fall back to json encoding the data
+        $body = $request->getContent();
+        if (empty($body)) {
+            $body = json_encode($request->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        
+        $expectedSignature = hash($hashMethod->getValue(), $body . $this->config->serviceKey);
 
-        if (! $result) {
+        if ($expectedSignature !== ($header['signature'] ?? '')) {
             throw new InvalidSignatureException;
         }
     }
