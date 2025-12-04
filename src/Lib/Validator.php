@@ -137,11 +137,15 @@ class Validator
 
         // Log signature mismatch for debugging
         if ($expectedSignature !== $receivedSignature) {
-            \Log::debug('Imoje signature verification failed', [
+            \Log::error('Imoje signature verification failed', [
                 'expected' => $expectedSignature,
                 'received' => $receivedSignature,
                 'body_length' => strlen($body),
+                'body_preview' => substr($body, 0, 200),
                 'algorithm' => $hashMethod->getValue(),
+                'service_key_length' => strlen($this->config->serviceKey),
+                'service_key_prefix' => substr($this->config->serviceKey, 0, 5),
+                'header_raw' => $request->headers->get('x-imoje-signature', ''),
             ]);
             throw new InvalidSignatureException;
         }
