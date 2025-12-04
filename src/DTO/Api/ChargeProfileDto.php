@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\DTO\Api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use JetBrains\PhpStorm\ArrayShape;
 use Routegroup\Imoje\Payment\DTO\BaseDto;
 use Routegroup\Imoje\Payment\Factories\Api\ChargeProfileDtoFactory;
 use Routegroup\Imoje\Payment\Lib\Config;
@@ -30,19 +29,11 @@ class ChargeProfileDto extends BaseDto
         'currency' => Currency::class,
     ];
 
-    public function __construct(
-        #[ArrayShape([
-            // Required
-            'paymentProfileId' => 'string',
-            'amount' => 'int',
-            'currency' => Currency::class,
-            'orderId' => 'string',
-            // Required but provided by default
-            'serviceId' => 'string',
-            // Optional
-            'title' => 'string',
-        ])] array $attributes = []
-    ) {
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
         $config = app(Config::class);
 
         $attributes = array_merge_recursive([

@@ -4,41 +4,52 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum TransactionStatus: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static TransactionStatus NEW()
+ * @method static TransactionStatus AUTHORIZED()
+ * @method static TransactionStatus PENDING()
+ * @method static TransactionStatus SUBMITTED_FOR_SETTLEMENT()
+ * @method static TransactionStatus REJECTED()
+ * @method static TransactionStatus SETTLED()
+ * @method static TransactionStatus ERROR()
+ * @method static TransactionStatus CANCELLED()
+ * @method static TransactionStatus REFUND()
+ */
+class TransactionStatus extends Enum
 {
-    case NEW = 'new';
-    case AUTHORIZED = 'authorized';
-    case PENDING = 'pending';
-    case SUBMITTED_FOR_SETTLEMENT = 'submitted_for_settlement';
-    case REJECTED = 'rejected';
-    case SETTLED = 'settled';
-    case ERROR = 'error';
-    case CANCELLED = 'cancelled';
-    case REFUND = 'refund';
+    const NEW = 'new';
+    const AUTHORIZED = 'authorized';
+    const PENDING = 'pending';
+    const SUBMITTED_FOR_SETTLEMENT = 'submitted_for_settlement';
+    const REJECTED = 'rejected';
+    const SETTLED = 'settled';
+    const ERROR = 'error';
+    const CANCELLED = 'cancelled';
+    const REFUND = 'refund';
 
     public function canChange(TransactionStatus $newStatus): bool
     {
-        if ($newStatus === self::NEW) {
+        if ($newStatus->equals(self::NEW())) {
             return false;
         }
 
-        if ($this === self::SETTLED && $newStatus === self::REFUND) {
+        if ($this->equals(self::SETTLED()) && $newStatus->equals(self::REFUND())) {
             return true;
         }
 
         if (
-            in_array($this, [
-                self::ERROR,
-                self::CANCELLED,
-                self::REJECTED,
-                self::SETTLED,
-                self::REFUND,
-            ])
+            $this->equals(self::ERROR()) ||
+            $this->equals(self::CANCELLED()) ||
+            $this->equals(self::REJECTED()) ||
+            $this->equals(self::SETTLED()) ||
+            $this->equals(self::REFUND())
         ) {
             return false;
         }
 
-        if ($this === $newStatus) {
+        if ($this->equals($newStatus)) {
             return false;
         }
 

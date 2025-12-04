@@ -23,7 +23,7 @@ class ActionDtoFactory extends Factory
         ];
     }
 
-    public function wireTransfer(): static
+    public function wireTransfer(): self
     {
         return $this->state([
             'iban' => $this->faker->iban,

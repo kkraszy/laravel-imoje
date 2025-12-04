@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum TransactionType: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static TransactionType REFUND()
+ * @method static TransactionType SALE()
+ */
+class TransactionType extends Enum
 {
-    case REFUND = 'refund';
-    case SALE = 'sale';
+    const REFUND = 'refund';
+    const SALE = 'sale';
 }

@@ -11,17 +11,25 @@ use Routegroup\Imoje\Payment\Types\HashMethod;
 
 class Utils
 {
-    public function __construct(
-        protected readonly Config $config,
-    ) {}
+    /** @var Config */
+    protected $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     public function createSignature(
         array $orderData,
-        HashMethod $hashMethod = HashMethod::SHA256
+        HashMethod $hashMethod = null
     ): string {
-        $hash = hash($hashMethod->value, $this->buildQuery($orderData).$this->config->serviceKey);
+        if ($hashMethod === null) {
+            $hashMethod = HashMethod::SHA256();
+        }
+        $hashValue = $hashMethod->getValue();
+        $hash = hash($hashValue, $this->buildQuery($orderData).$this->config->serviceKey);
 
-        return "{$hash};{$hashMethod->value}";
+        return "{$hash};{$hashValue}";
     }
 
     public function verifySignature(
@@ -31,7 +39,7 @@ class Utils
     ): bool {
         $body = json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        return $signature === hash($hashMethod->value, $body.$this->config->serviceKey);
+        return $signature === hash($hashMethod->getValue(), $body.$this->config->serviceKey);
     }
 
     public function buildQuery(array $orderData): string
@@ -59,8 +67,8 @@ class Utils
                 $result = $result->toArray();
             }
 
-            if (is_object($result) && enum_exists(get_class($result))) {
-                $result = $result->value;
+            if (is_object($result) && $result instanceof \MyCLabs\Enum\Enum) {
+                $result = $result->getValue();
             }
 
             $computed[$key] = $result;
@@ -71,15 +79,19 @@ class Utils
 
     public function mockHeaders(
         BaseDto $dto,
-        HashMethod $hashMethod = HashMethod::SHA256
+        HashMethod $hashMethod = null
     ): array {
+        if ($hashMethod === null) {
+            $hashMethod = HashMethod::SHA256();
+        }
         $body = json_encode($dto->toArray(), JSON_UNESCAPED_SLASHES);
-        $signature = hash($hashMethod->value, $body.$this->config->serviceKey);
+        $hashValue = $hashMethod->getValue();
+        $signature = hash($hashValue, $body.$this->config->serviceKey);
 
         $value = "merchantid={$this->config->merchantId};";
         $value .= "serviceid={$this->config->serviceId};";
         $value .= "signature=$signature;";
-        $value .= "alg=$hashMethod->value";
+        $value .= "alg=$hashValue";
 
         return ['x-imoje-signature' => $value];
     }

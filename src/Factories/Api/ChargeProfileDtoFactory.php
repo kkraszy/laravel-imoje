@@ -16,7 +16,7 @@ class ChargeProfileDtoFactory extends Factory
     {
         return [
             'amount' => $this->faker->numberBetween(1, 100) * 100,
-            'currency' => $this->faker->randomElement(Currency::cases()),
+            'currency' => new Currency($this->faker->randomElement(array_values(Currency::toArray()))),
         ];
     }
 }

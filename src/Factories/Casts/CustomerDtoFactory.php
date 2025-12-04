@@ -21,7 +21,7 @@ class CustomerDtoFactory extends Factory
         ];
     }
 
-    public function asCard(): static
+    public function asCard(): self
     {
         return $this->state([
             'cid' => $this->faker->numerify('##############'),

@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum TransactionSource: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static TransactionSource API()
+ * @method static TransactionSource WEB()
+ */
+class TransactionSource extends Enum
 {
-    case API = 'api';
-    case WEB = 'web';
+    const API = 'api';
+    const WEB = 'web';
 }

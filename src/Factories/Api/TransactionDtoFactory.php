@@ -33,7 +33,7 @@ class TransactionDtoFactory extends Factory
         ];
     }
 
-    public function asCard(): static
+    public function asCard(): self
     {
         return $this->state([
             'paymentMethod' => PaymentMethod::CARD,

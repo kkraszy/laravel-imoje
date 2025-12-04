@@ -23,7 +23,7 @@ public function postPayment(Paywall $paywall): RedirectResponse
 {
     $dto = new TransactionDto([
         'amount' => 100 * 100, // 100zł
-        'currency' => Currency::PLN,
+        'currency' => Currency::PLN(),
         'orderId' => (string) Str::uuid(),
         'customerFirstName' => 'Firstname',
         'customerLastName' => 'Lastname',
@@ -59,7 +59,7 @@ public function getForm(Config $config)
     
     $dto = new OneClickDto([
         'amount' => 100 * 100 // 100zł
-        'currency' => Currency::PLN,
+        'currency' => Currency::PLN(),
         'orderId' => (string) Str::uuid(),
         'customerId' => $auth->id,
         'customerFirstName' => $auth->firstname,

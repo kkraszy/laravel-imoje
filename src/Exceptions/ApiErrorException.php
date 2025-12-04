@@ -10,11 +10,14 @@ use Routegroup\Imoje\Payment\DTO\Responses\ApiErrorResponseDto;
 
 class ApiErrorException extends Exception
 {
-    public readonly Response $response;
+    /** @var Response */
+    public $response;
 
-    public readonly ApiErrorResponseDto $dto;
+    /** @var ApiErrorResponseDto */
+    public $dto;
 
-    public readonly array $request;
+    /** @var array */
+    public $request;
 
     public function __construct(
         Response $response,

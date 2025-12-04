@@ -4,18 +4,34 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum Currency: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static Currency PLN()
+ * @method static Currency EUR()
+ * @method static Currency CZK()
+ * @method static Currency GBP()
+ * @method static Currency USD()
+ * @method static Currency UAH()
+ * @method static Currency HRK()
+ * @method static Currency HUF()
+ * @method static Currency SEK()
+ * @method static Currency RON()
+ * @method static Currency CHF()
+ * @method static Currency BGN()
+ */
+class Currency extends Enum
 {
-    case PLN = 'PLN';
-    case EUR = 'EUR';
-    case CZK = 'CZK';
-    case GBP = 'GBP';
-    case USD = 'USD';
-    case UAH = 'UAH';
-    case HRK = 'HRK';
-    case HUF = 'HUF';
-    case SEK = 'SEK';
-    case RON = 'RON';
-    case CHF = 'CHF';
-    case BGN = 'BGN';
+    const PLN = 'PLN';
+    const EUR = 'EUR';
+    const CZK = 'CZK';
+    const GBP = 'GBP';
+    const USD = 'USD';
+    const UAH = 'UAH';
+    const HRK = 'HRK';
+    const HUF = 'HUF';
+    const SEK = 'SEK';
+    const RON = 'RON';
+    const CHF = 'CHF';
+    const BGN = 'BGN';
 }

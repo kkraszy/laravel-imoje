@@ -6,9 +6,13 @@ namespace Routegroup\Imoje\Payment\Lib;
 
 class Url
 {
-    public function __construct(
-        public readonly Config $config,
-    ) {}
+    /** @var Config */
+    public $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     public function createTransactionUrl(): string
     {

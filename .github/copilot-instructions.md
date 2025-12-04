@@ -1,10 +1,12 @@
 # Copilot Instructions for laravel-imoje
 
 ## Project Overview
-This is a Laravel package that integrates **imoje payment gateway** (Polish payment provider) with strongly-typed DTOs. The package provides three main interfaces:
+This is a Laravel 8+ package that integrates **imoje payment gateway** (Polish payment provider) with strongly-typed DTOs. Compatible with PHP 7.3/7.4/8.x. The package provides three main interfaces:
 - **Paywall** - Browser redirects for payment forms
 - **API** - Direct API integration for transactions, refunds, profiles
 - **Notifications** - Webhook handling with signature verification
+
+**Important**: This package uses **MyCLabs\Enum** library for PHP 7.3/7.4 compatibility instead of native PHP 8.1 enums.
 
 ## Architecture & Data Flow
 
@@ -16,7 +18,7 @@ This is a Laravel package that integrates **imoje payment gateway** (Polish paym
   - `Casts/` - Nested DTOs for API responses
   - `Responses/` - API response DTOs
   - `Notifications/` - Webhook notification DTOs
-- **`src/Types/`** - Backed enums for type safety (Currency, TransactionStatus, Environment, etc.)
+- **`src/Types/`** - Enums (using MyCLabs\Enum) for type safety (Currency, TransactionStatus, Environment, etc.)
 - **`src/Factories/`** - Laravel-style factories for testing DTOs (mirror DTO structure)
 
 ### DTO Pattern (Critical)
@@ -26,17 +28,23 @@ All DTOs extend `BaseDto` (which extends Laravel's `Fluent`) with these conventi
 2. **Auto-casting via `$casts` property** - Supports nested DTOs, enums, primitives
 3. **Null handling** - Set `protected bool $allowNull = true` to filter empty values (used in API DTOs)
 4. **Constructor auto-injection** - Paywall DTOs auto-inject `serviceId`, `merchantId`, and `signature` from Config
-5. **ArrayShape annotations** - All constructor params documented with `#[ArrayShape()]` for IDE support
+5. **PHPDoc annotations** - All constructor params documented with PHPDoc `@param` for IDE support
 
 Example from `src/DTO/Paywall/TransactionDto.php`:
 ```php
 protected array $casts = ['amount' => 'int'];
 
+/**
+ * @param array $attributes
+ * @param HashMethod|null $hashMethod
+ */
 public function __construct(
-    #[ArrayShape(['amount' => 'int', 'currency' => 'string', ...])] 
     $attributes = [],
-    HashMethod $hashMethod = HashMethod::SHA256
+    HashMethod $hashMethod = null
 ) {
+    if ($hashMethod === null) {
+        $hashMethod = HashMethod::SHA256();
+    }
     $config = app(Config::class);
     $attributes['serviceId'] = $config->serviceId;
     $attributes['signature'] = app(Utils::class)->createSignature($attributes, $hashMethod);
@@ -82,14 +90,25 @@ vendor/bin/pint             # Code formatting (Laravel Pint)
 Test setup uses Orchestra Testbench with mock credentials in `TestCase->getEnvironmentSetUp()`.
 
 ### Code Style
-- PHP 8.3+ with strict types (`declare(strict_types=1)`)
+- PHP 8.1+ with strict types (`declare(strict_types=1)`)
+- Laravel 8+ compatible
 - Laravel Pint for PSR-2 formatting
 - PHPStan for static analysis
-- Arch test enforces no `dd()`, `dump()`, `ray()` in production code
+- No `readonly` properties (use regular properties with PHPDoc)
+- Use `switch` instead of `match` expressions
+
+### Enum Usage (MyCLabs\Enum)
+All enums extend `MyCLabs\Enum\Enum` instead of native PHP 8.1 enums for PHP 7.3/7.4 compatibility:
+- **Define values**: `const CONSTANT_NAME = 'value'` instead of `case ConstantName = 'value'`
+- **Get value**: `$enum->getValue()` instead of `$enum->value`
+- **Create instance**: `new EnumClass('value')` or `EnumClass::CONSTANT_NAME()` factory method
+- **Cast from string**: `new EnumClass($value)` instead of `EnumClass::from($value)`
+- **Compare**: `$enum->equals($other)` instead of `$enum === $other`
+- **Get all values**: `EnumClass::toArray()` returns `['KEY' => 'value']`
 
 ### Adding New DTOs
 1. Extend `BaseDto`, define `$casts` array
-2. Add `#[ArrayShape()]` to constructor with all fields
+2. Add PHPDoc `@param` to constructor with all fields
 3. Create matching Factory in `src/Factories/` extending `Factory`
 4. Add `use HasFactory` and `@method static` annotation
 5. If response DTO, override `Factory->getResponseModel()` to mock `Response`
@@ -129,6 +148,7 @@ Factories extend `Factory` from this package (not Eloquent Factory directly). Us
 - **Guzzle** - HTTP client (via Laravel HTTP facade)
 - **justinrainbow/json-schema** - Webhook payload validation
 - **Orchestra Testbench** - Laravel package testing
+- **MyCLabs\Enum** - Enum emulation for PHP 7.3/7.4 compatibility
 
 ## Documentation
 - `docs/paywall.md` - Paywall integration examples

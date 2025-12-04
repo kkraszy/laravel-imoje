@@ -15,10 +15,17 @@ use Routegroup\Imoje\Payment\Types\TransactionType;
 
 class Validator
 {
-    public function __construct(
-        protected readonly JsonSchemaValidator $jsonValidator,
-        protected readonly Utils $utils,
-    ) {}
+    /** @var JsonSchemaValidator */
+    protected $jsonValidator;
+    
+    /** @var Utils */
+    protected $utils;
+
+    public function __construct(JsonSchemaValidator $jsonValidator, Utils $utils)
+    {
+        $this->jsonValidator = $jsonValidator;
+        $this->utils = $utils;
+    }
 
     /**
      * @throws SchemaValidationException
@@ -38,11 +45,11 @@ class Validator
                         ],
                         'currency' => [
                             'type' => 'string',
-                            'enum' => array_column(Currency::cases(), 'value'),
+                            'enum' => array_values(Currency::toArray()),
                         ],
                         'status' => [
                             'type' => 'string',
-                            'enum' => array_column(TransactionStatus::cases(), 'value'),
+                            'enum' => array_values(TransactionStatus::toArray()),
                         ],
                         'orderId' => [
                             'type' => 'string',
@@ -52,7 +59,7 @@ class Validator
                         ],
                         'type' => [
                             'type' => 'string',
-                            'enum' => array_column(TransactionType::cases(), 'value'),
+                            'enum' => array_values(TransactionType::toArray()),
                         ],
                     ],
                     'required' => [
@@ -111,7 +118,7 @@ class Validator
             $header
         );
 
-        $hashMethod = HashMethod::from($header['alg'] ?? '');
+        $hashMethod = new HashMethod($header['alg'] ?? 'sha256');
 
         $result = $this->utils->verifySignature(
             $header['signature'] ?? '',

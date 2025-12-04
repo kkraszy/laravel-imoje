@@ -22,10 +22,17 @@ use Routegroup\Imoje\Payment\Exceptions\ApiErrorException;
 
 class Api
 {
-    public function __construct(
-        protected readonly Config $config,
-        public readonly Url $url,
-    ) {}
+    /** @var Config */
+    protected $config;
+    
+    /** @var Url */
+    public $url;
+
+    public function __construct(Config $config, Url $url)
+    {
+        $this->config = $config;
+        $this->url = $url;
+    }
 
     public function createTransaction(
         TransactionDto $dto
@@ -130,16 +137,17 @@ class Api
      */
     protected function validateResponse(
         Response $response,
-        array $request = [],
+        array $request = []
     ): void {
         if ($response->ok()) {
             return;
         }
 
-        match ($response->status()) {
-            422 => throw new ApiErrorException($response, $request),
-            500 => throw new ApiErrorException($response),
-            default => null
-        };
+        switch ($response->status()) {
+            case 422:
+                throw new ApiErrorException($response, $request);
+            case 500:
+                throw new ApiErrorException($response);
+        }
     }
 }

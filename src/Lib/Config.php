@@ -8,11 +8,32 @@ use Routegroup\Imoje\Payment\Types\Environment;
 
 class Config
 {
+    /** @var string */
+    public $merchantId;
+    
+    /** @var string */
+    public $serviceId;
+    
+    /** @var string */
+    public $serviceKey;
+    
+    /** @var string */
+    public $apiKey;
+    
+    /** @var Environment */
+    public $env;
+
     public function __construct(
-        public readonly string $merchantId,
-        public readonly string $serviceId,
-        public readonly string $serviceKey,
-        public readonly string $apiKey,
-        public readonly Environment $env,
-    ) {}
+        string $merchantId,
+        string $serviceId,
+        string $serviceKey,
+        string $apiKey,
+        Environment $env
+    ) {
+        $this->merchantId = $merchantId;
+        $this->serviceId = $serviceId;
+        $this->serviceKey = $serviceKey;
+        $this->apiKey = $apiKey;
+        $this->env = $env;
+    }
 }

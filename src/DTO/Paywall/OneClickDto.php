@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\DTO\Paywall;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use JetBrains\PhpStorm\ArrayShape;
 use Routegroup\Imoje\Payment\DTO\BaseDto;
 use Routegroup\Imoje\Payment\Factories\Paywall\OneClickDtoFactory;
 use Routegroup\Imoje\Payment\Lib\Config;
@@ -46,39 +45,24 @@ class OneClickDto extends BaseDto
         'widgetType' => WidgetType::class,
     ];
 
+    /**
+     * @param array $attributes
+     * @param HashMethod $hashMethod
+     */
     public function __construct(
-        #[ArrayShape([
-            // Required
-            'amount' => 'int',
-            'currency' => 'string',
-            'orderId' => 'string',
-            'customerId' => 'string',
-            'customerFirstName' => 'string',
-            'customerLastName' => 'string',
-            'customerEmail' => 'string',
-            // Required but provided
-            'serviceId' => 'string',
-            'merchantId' => 'string',
-            'widgetType' => 'string',
-            'signature' => 'string',
-            // Optional
-            'customerPhone' => 'string',
-            'orderDescription' => 'string',
-            'urlSuccess' => 'string',
-            'urlFailure' => 'string',
-            'urlReturn' => 'string',
-            'urlCancel' => 'string',
-            'validTo' => 'int',
-        ])] $attributes = [],
-        HashMethod $hashMethod = HashMethod::SHA256
+        $attributes = [],
+        HashMethod $hashMethod = null
     ) {
+        if ($hashMethod === null) {
+            $hashMethod = HashMethod::SHA256();
+        }
         $config = app(Config::class);
         $utils = app(Utils::class);
 
         $attributes = array_merge_recursive([
             'serviceId' => $config->serviceId,
             'merchantId' => $config->merchantId,
-            'widgetType' => WidgetType::ONECLICK,
+            'widgetType' => WidgetType::ONECLICK(),
         ], $attributes);
 
         $attributes['signature'] = $utils->createSignature($attributes, $hashMethod);

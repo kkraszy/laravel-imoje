@@ -16,11 +16,11 @@ it('validates notification successfully', function (): void {
     $response = [
         'transaction' => [
             'amount' => 1000,
-            'currency' => Currency::EUR->value,
-            'status' => TransactionStatus::SETTLED->value,
+            'currency' => Currency::EUR()->getValue(),
+            'status' => TransactionStatus::SETTLED()->getValue(),
             'orderId' => '96e0e03a-c8d9-4ae6-90a6-10a58301cb5e',
             'serviceId' => '291bd8de-9f16-478e-b337-3d2e5a874926',
-            'type' => TransactionType::SALE->value,
+            'type' => TransactionType::SALE()->getValue(),
         ],
     ];
 

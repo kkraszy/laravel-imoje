@@ -58,14 +58,10 @@ it('transforms values', function (
     ],
     [
         [
-            'bar' => PaymentMethod::ING,
+            'bar' => PaymentMethod::ING(),
         ],
         [
-            'bar' => PaymentMethod::ING->value,
+            'bar' => PaymentMethod::ING()->getValue(),
         ],
     ],
 ]);
-
-it('mock headers')->todo();
-
-it('checks if contains structure')->todo();

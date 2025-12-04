@@ -8,7 +8,8 @@ use Exception;
 
 class NotImplementedException extends Exception
 {
-    public readonly array $data;
+    /** @var array */
+    public $data;
 
     public function __construct(array $data)
     {

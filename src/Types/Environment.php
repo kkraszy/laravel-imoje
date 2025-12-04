@@ -4,40 +4,47 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum Environment: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static Environment PRODUCTION()
+ * @method static Environment SANDBOX()
+ */
+class Environment extends Enum
 {
-    case PRODUCTION = 'production';
-    case SANDBOX = 'sandbox';
+    const PRODUCTION = 'production';
+    const SANDBOX = 'sandbox';
 
     public function apiUrl(): string
     {
-        return match ($this) {
-            self::PRODUCTION => 'https://api.imoje.pl/v1',
-            self::SANDBOX => 'https://sandbox.api.imoje.pl/v1',
-        };
+        if ($this->equals(self::PRODUCTION())) {
+            return 'https://api.imoje.pl/v1';
+        }
+        return 'https://sandbox.api.imoje.pl/v1';
     }
 
     public function paywallUrl(?Lang $lang = null): string
     {
         if ($lang) {
-            return match ($this) {
-                self::PRODUCTION => "https://paywall.imoje.pl/$lang->value/payment",
-                self::SANDBOX => "https://sandbox.paywall.imoje.pl/$lang->value/payment",
-            };
+            $langValue = $lang->getValue();
+            if ($this->equals(self::PRODUCTION())) {
+                return "https://paywall.imoje.pl/{$langValue}/payment";
+            }
+            return "https://sandbox.paywall.imoje.pl/{$langValue}/payment";
         }
 
-        return match ($this) {
-            self::PRODUCTION => 'https://paywall.imoje.pl/payment',
-            self::SANDBOX => 'https://sandbox.paywall.imoje.pl/payment',
-        };
+        if ($this->equals(self::PRODUCTION())) {
+            return 'https://paywall.imoje.pl/payment';
+        }
+        return 'https://sandbox.paywall.imoje.pl/payment';
     }
 
     public function widgetUrl(): string
     {
-        return match ($this) {
-            self::PRODUCTION => 'https://paywall.imoje.pl/js/widget.min.js',
-            self::SANDBOX => 'https://sandbox.paywall.imoje.pl/js/widget.min.js',
-        };
+        if ($this->equals(self::PRODUCTION())) {
+            return 'https://paywall.imoje.pl/js/widget.min.js';
+        }
+        return 'https://sandbox.paywall.imoje.pl/js/widget.min.js';
     }
 
     public function cdnUrl(): string

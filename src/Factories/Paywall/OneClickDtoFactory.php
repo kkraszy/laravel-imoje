@@ -25,7 +25,7 @@ class OneClickDtoFactory extends Factory
         ];
     }
 
-    public function withOptional(): static
+    public function withOptional(): self
     {
         return $this->state([
             'customerPhone' => $this->faker->numerify('#########'),

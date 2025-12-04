@@ -24,51 +24,51 @@ class TransactionDtoFactory extends Factory
 
         return [
             'id' => $this->faker->unique()->uuid,
-            'type' => TransactionType::SALE,
-            'status' => TransactionStatus::SETTLED,
-            'source' => TransactionSource::API,
+            'type' => TransactionType::SALE(),
+            'status' => TransactionStatus::SETTLED(),
+            'source' => TransactionSource::API(),
             'created' => $now->timestamp,
             'modified' => $now->timestamp,
             'serviceId' => config('services.imoje.service_id'),
             'amount' => $this->faker->numberBetween(1, 1000) * 100,
-            'currency' => Currency::PLN,
+            'currency' => Currency::PLN(),
             'orderId' => $this->faker->unique()->uuid,
-            'paymentMethod' => PaymentMethod::PAY_BY_LINK,
-            'paymentMethodCode' => PaymentMethodCode::IPKO,
+            'paymentMethod' => PaymentMethod::PAY_BY_LINK(),
+            'paymentMethodCode' => PaymentMethodCode::IPKO(),
         ];
     }
 
-    public function asApiPending(): static
+    public function asApiPending(): self
     {
         return $this->state([
-            'type' => TransactionType::SALE,
-            'status' => TransactionStatus::PENDING,
-            'source' => TransactionSource::API,
+            'type' => TransactionType::SALE(),
+            'status' => TransactionStatus::PENDING(),
+            'source' => TransactionSource::API(),
             'notificationUrl' => 'https://imoje.requestcatcher.com/',
         ]);
     }
 
-    public function asApiRefund(): static
+    public function asApiRefund(): self
     {
         return $this->state([
-            'type' => TransactionType::REFUND,
-            'status' => TransactionStatus::SETTLED,
-            'source' => TransactionSource::API,
+            'type' => TransactionType::REFUND(),
+            'status' => TransactionStatus::SETTLED(),
+            'source' => TransactionSource::API(),
         ]);
     }
 
-    public function asOneClick(): static
+    public function asOneClick(): self
     {
         return $this->state([
-            'type' => TransactionType::SALE,
-            'status' => TransactionStatus::SETTLED,
-            'source' => TransactionSource::WEB,
-            'paymentMethod' => PaymentMethod::CARD,
-            'paymentMethodCode' => PaymentMethodCode::ONECLICK,
+            'type' => TransactionType::SALE(),
+            'status' => TransactionStatus::SETTLED(),
+            'source' => TransactionSource::WEB(),
+            'paymentMethod' => PaymentMethod::CARD(),
+            'paymentMethodCode' => PaymentMethodCode::ONECLICK(),
         ]);
     }
 
-    public function withPaymentProfile(): static
+    public function withPaymentProfile(): self
     {
         return $this->state([
             'paymentProfile' => PaymentProfileDto::factory(),

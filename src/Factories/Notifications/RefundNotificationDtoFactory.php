@@ -23,8 +23,8 @@ class RefundNotificationDtoFactory extends Factory
         return [
             'transaction' => TransactionDto::factory()->state([
                 'orderId' => $orderId,
-                'type' => TransactionType::REFUND,
-                'status' => TransactionStatus::SETTLED,
+                'type' => TransactionType::REFUND(),
+                'status' => TransactionStatus::SETTLED(),
             ]),
             'payment' => TransactionPaymentDto::factory()->state([
                 'id' => $transactionId,

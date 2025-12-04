@@ -38,7 +38,7 @@ class TestCase extends Orchestra
             'service_id' => '$service_id$',
             'service_key' => '$service_key$',
             'api_key' => '$api_key$',
-            'env' => Environment::SANDBOX->value,
+            'env' => Environment::SANDBOX()->getValue(),
         ]);
 
         parent::getEnvironmentSetUp($app);

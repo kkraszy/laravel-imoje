@@ -21,11 +21,11 @@ class GenericNotificationDtoFactory extends Factory
     {
         return [
             'transaction' => TransactionDto::factory()->withPaymentProfile()->state([
-                'type' => TransactionType::SALE,
-                'status' => TransactionStatus::SETTLED,
+                'type' => TransactionType::SALE(),
+                'status' => TransactionStatus::SETTLED(),
             ]),
             'payment' => TransactionPaymentDto::factory()->state([
-                'status' => TransactionStatus::SETTLED,
+                'status' => TransactionStatus::SETTLED(),
             ]),
         ];
     }
@@ -47,7 +47,7 @@ class GenericNotificationDtoFactory extends Factory
         return new GenericNotificationDto($data);
     }
 
-    public function asPending(): static
+    public function asPending(): self
     {
         return $this->state([
             'transaction' => TransactionDto::factory()->state([

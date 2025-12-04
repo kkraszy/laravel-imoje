@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\DTO\Api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use JetBrains\PhpStorm\ArrayShape;
 use Routegroup\Imoje\Payment\DTO\BaseDto;
 use Routegroup\Imoje\Payment\Factories\Api\RefundDtoFactory;
 use Routegroup\Imoje\Payment\Lib\Config;
@@ -28,21 +27,15 @@ class RefundDto extends BaseDto
         'type' => TransactionType::class,
     ];
 
-    public function __construct(
-        #[ArrayShape([
-            // Required
-            'amount' => 'int',
-            // Required but passed by default
-            'type' => 'string',
-            'serviceId' => 'string',
-            // Optional
-            'title' => 'string',
-        ])] array $attributes = []
-    ) {
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
         $config = app(Config::class);
 
         $attributes = array_merge_recursive([
-            'type' => TransactionType::REFUND,
+            'type' => TransactionType::REFUND(),
             'serviceId' => $config->serviceId,
         ], $attributes);
 

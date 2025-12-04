@@ -33,7 +33,12 @@ abstract class BaseDto extends Fluent
         return $attributes;
     }
 
-    public function castAttribute(string $castType, mixed $value): mixed
+    /**
+     * @param string $castType
+     * @param mixed $value
+     * @return mixed
+     */
+    public function castAttribute(string $castType, $value)
     {
         if ($this->allowNull && empty($value)) {
             return null;
@@ -45,19 +50,30 @@ abstract class BaseDto extends Fluent
                 : new $castType($value ?? []);
         }
 
-        if (enum_exists($castType)) {
-            return $value instanceof $castType
-                ? $value
-                : $castType::from($value);
+        // MyCLabs\Enum support for PHP 7.3/7.4
+        if (is_subclass_of($castType, '\\MyCLabs\\Enum\\Enum')) {
+            if ($value instanceof $castType) {
+                return $value;
+            }
+            return new $castType($value);
         }
 
-        return match ($castType) {
-            'int', 'integer' => (int) $value,
-            'real', 'float', 'double' => (float) $value,
-            'string' => (string) $value,
-            'bool', 'boolean' => (bool) $value,
-            default => $value,
-        };
+        switch ($castType) {
+            case 'int':
+            case 'integer':
+                return (int) $value;
+            case 'real':
+            case 'float':
+            case 'double':
+                return (float) $value;
+            case 'string':
+                return (string) $value;
+            case 'bool':
+            case 'boolean':
+                return (bool) $value;
+            default:
+                return $value;
+        }
     }
 
     public function toArray(): array

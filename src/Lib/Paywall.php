@@ -11,9 +11,13 @@ use Routegroup\Imoje\Payment\Types\Lang;
 
 class Paywall
 {
-    public function __construct(
-        protected readonly Config $config
-    ) {}
+    /** @var Config */
+    protected $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     public function createTransaction(
         TransactionDto $dto,

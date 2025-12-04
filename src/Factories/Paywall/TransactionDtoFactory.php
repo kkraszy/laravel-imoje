@@ -16,14 +16,14 @@ class TransactionDtoFactory extends Factory
     {
         return [
             'amount' => $this->faker->numberBetween(1, 100000) * 100,
-            'currency' => Currency::PLN,
+            'currency' => Currency::PLN(),
             'orderId' => $this->faker->unique()->uuid,
             'customerFirstName' => $this->faker->firstName,
             'customerLastName' => $this->faker->lastName,
         ];
     }
 
-    public function withOptional(): static
+    public function withOptional(): self
     {
         return $this->state([
             'customerEmail' => $this->faker->email,

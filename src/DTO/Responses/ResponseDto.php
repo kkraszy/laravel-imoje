@@ -9,7 +9,8 @@ use Routegroup\Imoje\Payment\DTO\BaseDto;
 
 abstract class ResponseDto extends BaseDto
 {
-    public readonly Response $response;
+    /** @var Response */
+    public $response;
 
     public function __construct(Response $incomingData)
     {

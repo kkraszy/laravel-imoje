@@ -8,7 +8,8 @@ use Exception;
 
 class SchemaValidationException extends Exception
 {
-    public readonly array $errors;
+    /** @var array */
+    public $errors;
 
     public function __construct(array $errors)
     {

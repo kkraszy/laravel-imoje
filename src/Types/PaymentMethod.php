@@ -4,16 +4,30 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\Types;
 
-enum PaymentMethod: string
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static PaymentMethod CARD()
+ * @method static PaymentMethod PAY_BY_LINK()
+ * @method static PaymentMethod BLIK()
+ * @method static PaymentMethod PAYLATER()
+ * @method static PaymentMethod LEASE()
+ * @method static PaymentMethod WIRE_TRANSFER()
+ * @method static PaymentMethod ING()
+ * @method static PaymentMethod WALLET()
+ * @method static PaymentMethod VISA_MOBILE()
+ * @method static PaymentMethod IMOJE_INSTALLMENTS()
+ */
+class PaymentMethod extends Enum
 {
-    case CARD = 'card'; // Visa, MasterCard, Visa Mobile etc
-    case PAY_BY_LINK = 'pbl'; // Online transfer
-    case BLIK = 'blik';
-    case PAYLATER = 'imoje_paylater'; // Twisto, PayPo, PragmaGO etc
-    case LEASE = 'lease'; // ING Lease Now
-    case WIRE_TRANSFER = 'wt'; // Wire transfer
-    case ING = 'ing';
-    case WALLET = 'wallet'; // Electronic wallets
-    case VISA_MOBILE = 'visa_mobile';
-    case IMOJE_INSTALLMENTS = 'imoje_installments';
+    const CARD = 'card'; // Visa, MasterCard, Visa Mobile etc
+    const PAY_BY_LINK = 'pbl'; // Online transfer
+    const BLIK = 'blik';
+    const PAYLATER = 'imoje_paylater'; // Twisto, PayPo, PragmaGO etc
+    const LEASE = 'lease'; // ING Lease Now
+    const WIRE_TRANSFER = 'wt'; // Wire transfer
+    const ING = 'ing';
+    const WALLET = 'wallet'; // Electronic wallets
+    const VISA_MOBILE = 'visa_mobile';
+    const IMOJE_INSTALLMENTS = 'imoje_installments';
 }

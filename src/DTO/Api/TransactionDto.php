@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\DTO\Api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use JetBrains\PhpStorm\ArrayShape;
 use Routegroup\Imoje\Payment\DTO\BaseDto;
 use Routegroup\Imoje\Payment\DTO\Casts\BillingDto;
 use Routegroup\Imoje\Payment\DTO\Casts\CardDto;
@@ -60,35 +59,15 @@ class TransactionDto extends BaseDto
         // 'invoice' => 'array' @todo
     ];
 
-    public function __construct(
-        #[ArrayShape([
-            // Required
-            'amount' => 'int',
-            'currency' => 'string',
-            'orderId' => 'string',
-            'paymentMethod' => 'string',
-            'paymentMethodCode' => 'string',
-            'successReturnUrl' => 'string',
-            'failureReturnUrl' => 'string',
-            'customer' => 'object',
-            // Required but provided,
-            'type' => 'string',
-            'serviceId' => 'string',
-            // Optional
-            'title' => 'string',
-            'billing' => 'object',
-            'shipping' => 'object',
-            'card' => 'object',
-            'additionalData' => 'array',
-            'validTo' => 'int',
-            'multipayout' => 'array',
-            'invoice' => 'array',
-        ])] array $attributes = []
-    ) {
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
         $config = app(Config::class);
 
         $attributes = array_merge_recursive([
-            'type' => TransactionType::SALE,
+            'type' => TransactionType::SALE(),
             'serviceId' => $config->serviceId,
         ], $attributes);
 
