@@ -21,7 +21,7 @@ class ApiErrorException extends Exception
 
     public function __construct(
         Response $response,
-        array $request = [],
+        array $request = []
     ) {
         $data = $response->collect()->toArray();
 
