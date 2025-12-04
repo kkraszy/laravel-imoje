@@ -24,6 +24,8 @@ use MyCLabs\Enum\Enum;
  * @method static PaymentMethodCode GOOGLE_PAY()
  * @method static PaymentMethodCode IDEABANK()
  * @method static PaymentMethodCode IMOJE_INSTALLMENTS()
+ * @method static PaymentMethodCode INBANK()
+ * @method static PaymentMethodCode INBANK_0()
  * @method static PaymentMethodCode ING()
  * @method static PaymentMethodCode INTELIGO()
  * @method static PaymentMethodCode IPKO()
@@ -64,6 +66,8 @@ class PaymentMethodCode extends Enum
     const GOOGLE_PAY = 'gpay';
     const IDEABANK = 'ideabank';
     const IMOJE_INSTALLMENTS = 'imoje_installments';
+    const INBANK = 'inbank';
+    const INBANK_0 = 'inbank_0';
     const ING = 'ing';
     const INTELIGO = 'inteligo';
     const IPKO = 'ipko';
@@ -125,6 +129,9 @@ class PaymentMethodCode extends Enum
                 return 'getin.svg';
             case 'ideabank':
                 return 'ideabank.png';
+            case 'inbank':
+            case 'inbank_0':
+                return 'inbank.svg';
             case 'ing':
                 return 'ing.png';
             case 'inteligo':
