@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\Lib;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use JsonSchema\Validator as JsonSchemaValidator;
 use Routegroup\Imoje\Payment\Exceptions\InvalidSignatureException;
 use Routegroup\Imoje\Payment\Exceptions\SchemaValidationException;
@@ -137,7 +138,7 @@ class Validator
 
         // Log signature mismatch for debugging
         if ($expectedSignature !== $receivedSignature) {
-            \Log::error('Imoje signature verification failed', [
+            Log::error('Imoje signature verification failed', [
                 'expected' => $expectedSignature,
                 'received' => $receivedSignature,
                 'body_length' => strlen($body),

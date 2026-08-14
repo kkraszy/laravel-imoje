@@ -1,12 +1,12 @@
 # Copilot Instructions for laravel-imoje
 
 ## Project Overview
-This is a Laravel 8+ package that integrates **imoje payment gateway** (Polish payment provider) with strongly-typed DTOs. Compatible with PHP 7.3/7.4/8.x. The package provides three main interfaces:
+This is a Laravel 8+ package that integrates **imoje payment gateway** (Polish payment provider) with strongly-typed DTOs. Compatible with PHP 7.4/8.x. The package provides three main interfaces:
 - **Paywall** - Browser redirects for payment forms
 - **API** - Direct API integration for transactions, refunds, profiles
 - **Notifications** - Webhook handling with signature verification
 
-**Important**: This package uses **MyCLabs\Enum** library for PHP 7.3/7.4 compatibility instead of native PHP 8.1 enums.
+**Important**: This package uses **MyCLabs\Enum** library for PHP 7.4 compatibility instead of native PHP 8.1 enums.
 
 ## Architecture & Data Flow
 
@@ -98,7 +98,7 @@ Test setup uses Orchestra Testbench with mock credentials in `TestCase->getEnvir
 - Use `switch` instead of `match` expressions
 
 ### Enum Usage (MyCLabs\Enum)
-All enums extend `MyCLabs\Enum\Enum` instead of native PHP 8.1 enums for PHP 7.3/7.4 compatibility:
+All enums extend `MyCLabs\Enum\Enum` instead of native PHP 8.1 enums for PHP 7.4 compatibility:
 - **Define values**: `const CONSTANT_NAME = 'value'` instead of `case ConstantName = 'value'`
 - **Get value**: `$enum->getValue()` instead of `$enum->value`
 - **Create instance**: `new EnumClass('value')` or `EnumClass::CONSTANT_NAME()` factory method
@@ -148,7 +148,7 @@ Factories extend `Factory` from this package (not Eloquent Factory directly). Us
 - **Guzzle** - HTTP client (via Laravel HTTP facade)
 - **justinrainbow/json-schema** - Webhook payload validation
 - **Orchestra Testbench** - Laravel package testing
-- **MyCLabs\Enum** - Enum emulation for PHP 7.3/7.4 compatibility
+- **MyCLabs\Enum** - Enum emulation for PHP 7.4 compatibility
 
 ## Documentation
 - `docs/paywall.md` - Paywall integration examples

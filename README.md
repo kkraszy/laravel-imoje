@@ -10,7 +10,7 @@
 This package is an integration of [imoje payments](https://www.imoje.pl/) with typed objects, which will help you integrate payments quickly.
 
 **Requirements:**
-- PHP 7.3, 7.4, or 8.x
+- PHP 7.4 or 8.x
 - Laravel 8.x or higher
 
 ## Installation

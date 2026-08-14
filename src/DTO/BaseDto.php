@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Routegroup\Imoje\Payment\DTO;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;
+use Routegroup\Imoje\Payment\Contracts\LenientEnum;
 use Routegroup\Imoje\Payment\Exceptions\ReadOnlyDtoException;
 use Routegroup\Imoje\Payment\Lib\Utils;
 
@@ -50,11 +52,23 @@ abstract class BaseDto extends Fluent
                 : new $castType($value ?? []);
         }
 
-        // MyCLabs\Enum support for PHP 7.3/7.4
+        // MyCLabs\Enum support for PHP 7.4
         if (is_subclass_of($castType, '\\MyCLabs\\Enum\\Enum')) {
             if ($value instanceof $castType) {
                 return $value;
             }
+
+            // imoje adds payment channels before documenting them, so an unknown
+            // value must not blow up the whole notification - see LenientEnum.
+            if (is_a($castType, LenientEnum::class, true) && ! $castType::isValid($value)) {
+                Log::warning('Imoje returned an unknown value for a lenient enum', [
+                    'enum' => $castType,
+                    'value' => $value,
+                ]);
+
+                return null;
+            }
+
             return new $castType($value);
         }
 

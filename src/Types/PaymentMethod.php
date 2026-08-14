@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\Types;
 
 use MyCLabs\Enum\Enum;
+use Routegroup\Imoje\Payment\Contracts\LenientEnum;
 
 /**
  * @method static PaymentMethod CARD()
@@ -18,7 +19,7 @@ use MyCLabs\Enum\Enum;
  * @method static PaymentMethod VISA_MOBILE()
  * @method static PaymentMethod IMOJE_INSTALLMENTS()
  */
-class PaymentMethod extends Enum
+class PaymentMethod extends Enum implements LenientEnum
 {
     const CARD = 'card'; // Visa, MasterCard, Visa Mobile etc
     const PAY_BY_LINK = 'pbl'; // Online transfer

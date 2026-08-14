@@ -28,8 +28,8 @@ use Routegroup\Imoje\Payment\Types\TransactionType;
  * @property-read Currency $currency
  * @property-read string $title
  * @property-read string $orderId
- * @property-read PaymentMethod $paymentMethod
- * @property-read PaymentMethodCode $paymentMethodCode
+ * @property-read PaymentMethod|null $paymentMethod
+ * @property-read PaymentMethodCode|null $paymentMethodCode
  * @property-read PaymentProfileDto|null $paymentProfile
  * @property-read string|null $statusCode
  * @property-read string|null $statusCodeDescription

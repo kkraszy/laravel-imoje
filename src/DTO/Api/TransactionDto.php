@@ -22,8 +22,8 @@ use Routegroup\Imoje\Payment\Types\TransactionType;
  * @property-read int $amount
  * @property-read Currency $currency
  * @property-read string $orderId
- * @property-read PaymentMethod $paymentMethod
- * @property-read PaymentMethodCode $paymentMethodCode
+ * @property-read PaymentMethod|null $paymentMethod
+ * @property-read PaymentMethodCode|null $paymentMethodCode
  * @property-read string $successReturnUrl
  * @property-read string $failureReturnUrl
  * @property-read CustomerDto $customer

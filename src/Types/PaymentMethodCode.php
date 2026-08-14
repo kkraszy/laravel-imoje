@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Routegroup\Imoje\Payment\Types;
 
 use MyCLabs\Enum\Enum;
+use Routegroup\Imoje\Payment\Contracts\LenientEnum;
 
 /**
  * @method static PaymentMethodCode ALIOR()
@@ -34,6 +35,7 @@ use MyCLabs\Enum\Enum;
  * @method static PaymentMethodCode NEST()
  * @method static PaymentMethodCode NOBLE()
  * @method static PaymentMethodCode PAYLATER()
+ * @method static PaymentMethodCode PAYPAL()
  * @method static PaymentMethodCode PAYPO()
  * @method static PaymentMethodCode PBS()
  * @method static PaymentMethodCode PEKAO24()
@@ -43,11 +45,26 @@ use MyCLabs\Enum\Enum;
  * @method static PaymentMethodCode TMOBILE()
  * @method static PaymentMethodCode VISA_MOBILE()
  * @method static PaymentMethodCode WIRE_TRANSFER()
+ * @method static PaymentMethodCode WIRE_TRANSFER_SPLIT()
+ * @method static PaymentMethodCode CS()
+ * @method static PaymentMethodCode MP()
+ * @method static PaymentMethodCode KB()
+ * @method static PaymentMethodCode RF()
+ * @method static PaymentMethodCode PG()
+ * @method static PaymentMethodCode PF()
+ * @method static PaymentMethodCode CB()
+ * @method static PaymentMethodCode UC()
+ * @method static PaymentMethodCode POSTA()
+ * @method static PaymentMethodCode SPORO()
+ * @method static PaymentMethodCode TATRA()
+ * @method static PaymentMethodCode VIAMO()
+ * @method static PaymentMethodCode VUB()
  * @method static PaymentMethodCode ONECLICK()
  * @method static PaymentMethodCode RECURRING()
  * @method static PaymentMethodCode ECOM3DS()
+ * @method static PaymentMethodCode C2P()
  */
-class PaymentMethodCode extends Enum
+class PaymentMethodCode extends Enum implements LenientEnum
 {
     const ALIOR = 'alior';
     const APPLEPAY = 'applepay';
@@ -76,6 +93,7 @@ class PaymentMethodCode extends Enum
     const NEST = 'nest';
     const NOBLE = 'noble';
     const PAYLATER = 'imoje_twisto';
+    const PAYPAL = 'paypal';
     const PAYPO = 'paypo';
     const PBS = 'pbs';
     const PEKAO24 = 'pekao24';
@@ -85,11 +103,28 @@ class PaymentMethodCode extends Enum
     const TMOBILE = 'tmobile';
     const VISA_MOBILE = 'visa_mobile';
     const WIRE_TRANSFER = 'wt';
+    const WIRE_TRANSFER_SPLIT = 'wt_split';
+
+    // Czech and Slovak pay-by-link channels, named after the codes imoje returns
+    const CS = 'cs';
+    const MP = 'mp';
+    const KB = 'kb';
+    const RF = 'rf';
+    const PG = 'pg';
+    const PF = 'pf';
+    const CB = 'cb';
+    const UC = 'uc';
+    const POSTA = 'posta';
+    const SPORO = 'sporo';
+    const TATRA = 'tatra';
+    const VIAMO = 'viamo';
+    const VUB = 'vub';
 
     // For notification
     const ONECLICK = 'oneclick';
     const RECURRING = 'recurring';
     const ECOM3DS = 'ecom3ds';
+    const C2P = 'c2p';
 
     public function getLogo(): ?string
     {
